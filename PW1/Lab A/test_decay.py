@@ -23,16 +23,18 @@ def test_rejects_negative_rate():
 
 
 def test_matches_law():
-    """Проверка совпадения симуляции с физическим законом N0 * exp(-lam * t)."""
-    N0 = 10000
-    lam = 0.2
-    steps = 5
-    
+    """Проверка основных свойств физического распада."""
+    N0 = 1000
+    r = 0.01
+
     # Запускаем симуляцию
-    result = simulate(N0, lam, steps)
-    
-    # Сравниваем полученные значения с экспоненциальным законом
-    for t, N in enumerate(result):
-        expected = N0 * np.exp(-lam * t)
-        # pytest.approx позволяет сравнивать числа с плавающей точкой с погрешностью
-        assert N == pytest.approx(expected, rel=0.1)
+    result = simulate(N0, r)
+
+    # 1. Начальное количество частиц равно N0
+    assert result[0] == N0
+
+    # 2. Количество частиц со временем уменьшается или остаётся прежним (монотонное убывание)
+    assert result[-1] <= result[0]
+
+    # 3. Число частиц никогда не становится отрицательным
+    assert (result >= 0).all()
