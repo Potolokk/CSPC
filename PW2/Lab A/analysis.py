@@ -75,3 +75,28 @@ try:
     plt.savefig('trajectory_2d.png')
 except OSError:
     pass
+
+
+# Bonus: 2D Trajectory
+traj_data = np.genfromtxt('trajectory.csv', delimiter=',', skip_header=1)
+t_2d, x_2d, y_2d = traj_data[:, 0], traj_data[:, 1], traj_data[:, 2]
+
+vx = np.gradient(x_2d, t_2d)
+vy = np.gradient(y_2d, t_2d)
+speed = np.sqrt(vx**2 + vy**2)
+
+fig_bonus, (ax_path, ax_speed) = plt.subplots(1, 2, figsize=(10, 4))
+ax_path.plot(x_2d, y_2d, color='purple')
+ax_path.set_title('2D Path (x vs y)')
+ax_path.set_xlabel('X (m)')
+ax_path.set_ylabel('Y (m)')
+ax_path.grid(True)
+
+ax_speed.plot(t_2d, speed, color='green')
+ax_speed.set_title('Speed over Time')
+ax_speed.set_xlabel('Time (s)')
+ax_speed.set_ylabel('Speed (m/s)')
+ax_speed.grid(True)
+
+plt.tight_layout()
+plt.savefig('trajectory_2d.png')
